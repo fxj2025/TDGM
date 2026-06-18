@@ -1,0 +1,5 @@
+Scenario,Features,Noise,AUC,Retention
+Baseline,Full,0%,0.971,1.0
+Privacy Mode,L1 Only,0%,0.9558,0.9844
+Data Noise,Full,15%,0.8568,0.8824
+Worst Case,L1 Only,15%,0.7354,0.7574

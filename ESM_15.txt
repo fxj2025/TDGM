@@ -1,0 +1,108 @@
+Pre-generated data files are provided to ensure exact reproducibility of all reported results. Users may also re-run ESM_1–ESM_4 to generate new data; minor numerical differences from reported values are expected due to system-level random number generation variability across platforms and library versions.
+========================================================================
+Supplementary Code for:
+"Mechanism-Guided Synthetic Tax Data Generation: A Computational Framework for Tax Evasion Detection"
+========================================================================
+
+OVERVIEW
+--------
+This archive contains all Python scripts required to reproduce the
+experimental results, tables, and figures reported in the paper.
+The code implements the Tax Data Generation Model (TDGM) and all
+downstream analyses.
+
+REQUIREMENTS
+------------
+Python 3.8+
+Required packages:
+  numpy, pandas, scikit-learn, xgboost, matplotlib, sdv
+
+Install dependencies:
+  pip install numpy pandas scikit-learn xgboost matplotlib sdv
+
+EXECUTION ORDER
+---------------
+Scripts must be run in the following order from the same directory.
+Each script generates output files consumed by later scripts.
+
+  Step 1 | ESM_1.py
+            Core model. Generates synthetic tax panel data.
+            Output: ESM_9.csv (30,000 records, 10,000
+            firms × 3 years)
+
+  Step 2 | ESM_2.py
+            Compares TDGM against CTGAN on accounting constraint
+            validity and temporal AR(1) structure.
+            Requires: ESM_9.csv
+            Output: ESM_12.csv  →  Table 4 in paper
+
+  Step 3 | ESM_3.py
+            Trains five classifiers (LR, NB, RF, NN, XGBoost) and
+            evaluates detection performance and robustness.
+            Requires: ESM_9.csv
+            Output: ESM_13.csv →  Table 5 in paper
+                         ESM_14.csv →  Table 6 in paper
+
+  Step 4 | ESM_4.py
+            Runs signal strength and prevalence sensitivity analyses.
+            Requires: ESM_9.csv (via ESM_1.py)
+            Output: ESM_10.csv  →  data for Figure 4
+                         ESM_11.csv  →  data for Figure 5
+
+  Step 5 | ESM_5.py
+            Generates the TDGM framework flowchart.
+            No data dependencies (standalone).
+            Output: Figure2_TDGM_Framework.png/pdf  →  Figure 2
+
+  Step 6 | ESM_6.py
+            Validates Zipf's law on generated revenue distribution.
+            Requires: ESM_9.csv
+            Output: Figure_3_Zipf.png/pdf  →  Figure 3
+
+  Step 7 | ESM_7.py
+            Plots AUC vs. signal strength scenarios.
+            Requires: ESM_10.csv (from Step 4)
+            Output: Figure4_SignalStrength.png/pdf  →  Figure 4
+
+  Step 8 | ESM_8.py
+            Plots AUC stability across risk prevalence rates (1%-20%).
+            Requires: ESM_11.csv (from Step 4)
+            Output: Figure5_Environmental_Invariance.png/pdf  →  Figure 5
+
+NOTES
+-----
+- All scripts use random_seed=42 for reproducibility.
+- Steps 2, 3, and 4 can be run in any order after Step 1.
+- Steps 5 and 6 can be run at any time after Step 1.
+- Steps 7 and 8 require Step 4 to complete first.
+- ESM_4 imports TDGMEnhanced from ESM_1.py; both files must
+  be in the same directory.
+- Approximate runtimes: ESM_1 ~2 min, ESM_2 ~30 min (CTGAN training),
+  ESM_3 ~3 min, ESM_4 ~10 min, ESM_5-ESM_8 <1 min each.
+- Ground-truth columns: In ESM_9.csv, the variables prefixed with
+  "true_" (true_revenue, true_cost, true_profit, true_tax) and
+  "expected_electricity" represent pre-manipulation ground-truth values
+  used solely for data generation and validation. They are excluded from
+  all feature sets used for detection model training (see ESM_3.py) to
+  prevent label leakage. Only reported (post-manipulation) values and
+  derived ratios enter the classifiers.
+
+FILE SUMMARY
+------------
+  ESM_1.py      Core data generation model (TDGM)
+  ESM_2.py      Table 4 (TDGM vs CTGAN comparison)
+  ESM_3.py      Tables 5 & 6 (classifier comparison and robustness)
+  ESM_4.py      Sensitivity analysis data generation
+  ESM_5.py      Figure 2 (framework architecture diagram)
+  ESM_6.py      Figure 3 (Zipf's law validation)
+  ESM_7.py      Figure 4 (signal strength sensitivity plot)
+  ESM_8.py      Figure 5 (environmental invariance plot)
+  ESM_9.csv     Pre-generated synthetic tax panel dataset  (30,000 firm-year observations; input for ESM_2, ESM_3, ESM_4, ESM_6)
+  ESM_10.csv   Pre-generated sensitivity analysis data for Figure 4  (AUC across signal strength scenarios; input for ESM_7)
+  ESM_11.csv   Pre-generated sensitivity analysis data for Figure 5  (AUC across risk prevalence rates 1%–20%; input for ESM_8)
+  ESM_12.csv   Pre-generated experimental results for Table 4  (TDGM vs CTGAN data quality comparison)
+  ESM_13.csv   Pre-generated experimental results for Table 5  (classifier detection performance comparison)
+  ESM_14.csv   Pre-generated experimental results for Table 6  (robustness analysis across feature sets and noise levels)
+  ESM_15.txt   README (this file)
+
+========================================================================
